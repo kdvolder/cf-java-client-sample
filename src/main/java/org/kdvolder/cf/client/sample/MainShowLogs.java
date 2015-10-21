@@ -7,17 +7,9 @@ import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.StreamingLogToken;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 
-public class Main {
+import static org.kdvolder.cf.client.sample.AppConstants.*;
 
-	private static final String CC_URL = "https://api.run.pez.pivotal.io";
-	private static final String ORG_NAME = "pivot-kdevolder";
-	private static final String SPACE_NAME = "development";
-	private static final String EMAIL = "kris.de.volder@gmail.com";
-	private static final String PW = System.getProperty("cf.password");
-	private static final boolean SELF_SIGNED = false;
-	private static final String APP_NAME = "demo-logger";
-	private static final long RUNNING_TIME = 1000 * 60 * 10; // 10 minutes
-
+public class MainShowLogs {
 
 	public static void main(String[] args) throws Exception {
 		CloudCredentials creds = new CloudCredentials(EMAIL, PW);
