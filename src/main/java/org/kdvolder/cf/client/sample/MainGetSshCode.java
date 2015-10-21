@@ -31,21 +31,7 @@ public class MainGetSshCode {
 				SELF_SIGNED
 		);
 		
-		AuthorizationHeaderProvider oauth = new AuthorizationHeaderProvider() {
-			public String getAuthorizationHeader() {
-				OAuth2AccessToken token = client.login();
-				return token.getTokenType()+" "+token.getValue();
-			}
-		};
-		
-		CloudInfoV2 cloudInfo = new CloudInfoV2(
-				creds,
-				new URL(CC_URL),
-				PROXY_CONF,
-				SELF_SIGNED
-		);
-		
-		SshClientSupport ssh = new SshClientSupport(oauth, cloudInfo, SELF_SIGNED, PROXY_CONF);
+		SshClientSupport ssh = SshClientSupport.create(client, creds, PROXY_CONF, SELF_SIGNED);
 		
 
 		//Just to make sure stuff is alright:

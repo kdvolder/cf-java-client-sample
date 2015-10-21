@@ -13,12 +13,15 @@ package org.kdvolder.cf.client.sample.ssh;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.cloudfoundry.client.lib.CloudCredentials;
 import org.cloudfoundry.client.lib.CloudFoundryException;
+import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.CloudOperationException;
 import org.cloudfoundry.client.lib.HttpProxyConfiguration;
 import org.springframework.http.HttpMethod;
@@ -26,6 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -97,6 +101,24 @@ public class SshClientSupport {
 
 	public SshHost getSshHost() {
 		return cloudInfo.getSshHost();
+	}
+
+	public static SshClientSupport create(final CloudFoundryOperations client, CloudCredentials creds, HttpProxyConfiguration proxyConf, boolean selfSigned) {
+		AuthorizationHeaderProvider oauth = new AuthorizationHeaderProvider() {
+			public String getAuthorizationHeader() {
+				OAuth2AccessToken token = client.login();
+				return token.getTokenType()+" "+token.getValue();
+			}
+		};
+		
+		CloudInfoV2 cloudInfo = new CloudInfoV2(
+				creds,
+				client.getCloudControllerUrl(),
+				proxyConf,
+				selfSigned
+		);
+
+		return new SshClientSupport(oauth, cloudInfo, selfSigned, proxyConf);
 	}
 
 }
