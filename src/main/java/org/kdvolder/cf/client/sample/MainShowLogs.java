@@ -7,7 +7,7 @@ import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.StreamingLogToken;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 
-import static org.kdvolder.cf.client.sample.AppConstants.*;
+import static org.kdvolder.cf.client.sample.CfClientConstants.*;
 
 public class MainShowLogs {
 
