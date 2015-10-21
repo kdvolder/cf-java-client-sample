@@ -1,3 +1,18 @@
+/*
+ * Copyright 2009-2015 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kdvolder.cf.client.sample.ssh;
 
 import static org.apache.http.conn.ssl.SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER;
@@ -22,29 +37,27 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Some helper utilities for creating classes used for the REST support.
+ *
+ * @author Kris De Volder
+ * @author Thomas Risberg
+ */
 public class RestUtils {
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////// Copied from cf-java-client lib with minor modifications to allow disabling redirect handling
+	//  Select methods, copied from cf-java-client lib's RestUtil with minor modifications to allow 
+	//  disabling redirect handling
 
-	/**
-	 * @author Thomas Risberg
-	 * @author Kris De Volder
-	 */
 	public static RestTemplate createRestTemplate(HttpProxyConfiguration httpProxyConfiguration, boolean trustSelfSignedCerts, boolean disableRedirectHandling) {
 		RestTemplate restTemplate = new LoggingRestTemplate();
 		restTemplate.setRequestFactory(createRequestFactory(httpProxyConfiguration, trustSelfSignedCerts, disableRedirectHandling));
 		restTemplate.setErrorHandler(new CloudControllerResponseErrorHandler());
-		//TODO: for now we don't need, we don't even care about the body of the message anyhow.
 		//restTemplate.setMessageConverters(getHttpMessageConverters());
-
+		//TODO ^^^ But, we don't seem to need custom message convertors for what we do right now.
 		return restTemplate;
 	}
 	
-	/**
-	 * @author Thomas Risberg
-	 * @author Kris De Volder
-	 */
 	public static ClientHttpRequestFactory createRequestFactory(HttpProxyConfiguration httpProxyConfiguration, boolean trustSelfSignedCerts, boolean disableRedirectHandling) {
 		HttpClientBuilder httpClientBuilder = HttpClients.custom().useSystemProperties();
 
