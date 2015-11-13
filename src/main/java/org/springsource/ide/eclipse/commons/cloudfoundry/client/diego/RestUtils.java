@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springsource.ide.eclipse.commons.cloudfoundry.client.ssh;
+package org.springsource.ide.eclipse.commons.cloudfoundry.client.diego;
 
 import static org.apache.http.conn.ssl.SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER;
 

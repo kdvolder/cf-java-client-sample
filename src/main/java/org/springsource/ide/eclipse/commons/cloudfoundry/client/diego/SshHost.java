@@ -10,7 +10,7 @@
  * Contributors:
  *     Pivotal Software, Inc. - initial API and implementation
  *******************************************************************************/
-package org.springsource.ide.eclipse.commons.cloudfoundry.client.ssh;
+package org.springsource.ide.eclipse.commons.cloudfoundry.client.diego;
 
 /**
  * Info object containing various bits of info about the host to which an ssh

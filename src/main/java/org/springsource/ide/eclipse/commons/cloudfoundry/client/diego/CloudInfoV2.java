@@ -10,7 +10,7 @@
  * Contributors:
  *     Pivotal Software, Inc. - initial API and implementation
  *******************************************************************************/
-package org.springsource.ide.eclipse.commons.cloudfoundry.client.ssh;
+package org.springsource.ide.eclipse.commons.cloudfoundry.client.diego;
 
 import java.net.URL;
 import java.util.Map;

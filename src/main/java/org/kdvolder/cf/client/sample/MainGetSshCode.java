@@ -15,7 +15,7 @@ import org.cloudfoundry.client.lib.CloudCredentials;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
-import org.springsource.ide.eclipse.commons.cloudfoundry.client.ssh.SshClientSupport;
+import org.springsource.ide.eclipse.commons.cloudfoundry.client.diego.SshClientSupport;
 
 public class MainGetSshCode {
 
