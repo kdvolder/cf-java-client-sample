@@ -1,6 +1,4 @@
 /*******************************************************************************
- * Copied from Spring Tool Suite. Original license:
- *
  * Copyright (c) 2015 Pivotal Software, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +10,6 @@
  *******************************************************************************/
 package org.springsource.ide.eclipse.commons.cloudfoundry.client.diego;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -22,50 +19,27 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.cloudfoundry.client.lib.CloudCredentials;
+import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.CloudFoundryException;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.CloudOperationException;
 import org.cloudfoundry.client.lib.HttpProxyConfiguration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.ClientHttpRequest;
-import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author Kris De Volder
  */
-public class SshClientSupport {
+public class SshClientSupport extends CfClientSideCart {
 
-	private AuthorizationHeaderProvider oauth;
-	private RestTemplate restTemplate;
-	private CloudInfoV2 cloudInfo;
 	private String authorizationUrl;
 	private String sshClientId;
 
-	public SshClientSupport(AuthorizationHeaderProvider oauth, CloudInfoV2 cloudInfo, boolean trustSelfSigned, HttpProxyConfiguration httpProxyConfiguration) {
-		this.cloudInfo = cloudInfo;
-		this.oauth = oauth;
-
-		this.restTemplate = RestUtils.createRestTemplate(httpProxyConfiguration, trustSelfSigned, true);
-		ClientHttpRequestFactory requestFactory = restTemplate.getRequestFactory();
-		restTemplate.setRequestFactory(authorize(requestFactory));
-
+	public SshClientSupport(CloudFoundryClient client, CloudInfoV2 cloudInfo, boolean trustSelfSigned, HttpProxyConfiguration httpProxyConfiguration) {
+		super(client, cloudInfo, trustSelfSigned, httpProxyConfiguration);
 		this.authorizationUrl = cloudInfo.getAuthorizationUrl();
 		this.sshClientId = cloudInfo.getSshClientId();
-	}
-
-	private ClientHttpRequestFactory authorize(final ClientHttpRequestFactory delegate) {
-		return new ClientHttpRequestFactory() {
-
-			public ClientHttpRequest createRequest(URI uri, HttpMethod httpMethod) throws IOException {
-				ClientHttpRequest request = delegate.createRequest(uri, httpMethod);
-				request.getHeaders().add("Authorization", oauth.getAuthorizationHeader()); //$NON-NLS-1$
-				return request;
-			}
-		};
 	}
 
 	public String getSshCode() {
@@ -107,14 +81,7 @@ public class SshClientSupport {
 		return cloudInfo.getSshHost();
 	}
 
-	public static SshClientSupport create(final CloudFoundryOperations client, CloudCredentials creds, HttpProxyConfiguration proxyConf, boolean selfSigned) {
-		AuthorizationHeaderProvider oauth = new AuthorizationHeaderProvider() {
-			public String getAuthorizationHeader() {
-				OAuth2AccessToken token = client.login();
-				return token.getTokenType()+" "+token.getValue();
-			}
-		};
-
+	public static SshClientSupport create(final CloudFoundryClient client, CloudCredentials creds, HttpProxyConfiguration proxyConf, boolean selfSigned) {
 		CloudInfoV2 cloudInfo = new CloudInfoV2(
 				creds,
 				client.getCloudControllerUrl(),
@@ -122,7 +89,7 @@ public class SshClientSupport {
 				selfSigned
 		);
 
-		return new SshClientSupport(oauth, cloudInfo, selfSigned, proxyConf);
+		return new SshClientSupport(client, cloudInfo, selfSigned, proxyConf);
 	}
 
 	/**

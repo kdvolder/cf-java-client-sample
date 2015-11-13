@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copied from Spring Tool Suite. Original license:
- * 
+ *
  * Copyright (c) 2015 Pivotal Software, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,10 +38,15 @@ public class CloudInfoV2 {
 	public String getSshClientId() {
 		return getProp("app_ssh_oauth_client"); //$NON-NLS-1$
 	}
-	
+
 	public String getAuthorizationUrl() {
 		return getProp("authorization_endpoint"); //$NON-NLS-1$
 	}
+
+	public String getCloudControllerUrl() {
+		return ccUrl.toString();
+	}
+
 
 	public String getProp(String name) {
 		Map<String, Object> map = getMap();
@@ -79,4 +84,5 @@ public class CloudInfoV2 {
 		}
 		return null;
 	}
+
 }
