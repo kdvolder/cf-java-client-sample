@@ -1,4 +1,6 @@
 /*******************************************************************************
+ * Copied from Spring Tool Suite. Original license:
+ * 
  * Copyright (c) 2015 Pivotal Software, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +10,7 @@
  * Contributors:
  *     Pivotal Software, Inc. - initial API and implementation
  *******************************************************************************/
-package org.kdvolder.cf.client.sample.ssh;
+package org.springsource.ide.eclipse.commons.cloudfoundry.client.ssh;
 
 import java.net.URL;
 import java.util.Map;
@@ -34,11 +36,11 @@ public class CloudInfoV2 {
 	}
 
 	public String getSshClientId() {
-		return getProp("app_ssh_oauth_client");
+		return getProp("app_ssh_oauth_client"); //$NON-NLS-1$
 	}
 	
 	public String getAuthorizationUrl() {
-		return getProp("authorization_endpoint");
+		return getProp("authorization_endpoint"); //$NON-NLS-1$
 	}
 
 	public String getProp(String name) {
@@ -51,7 +53,7 @@ public class CloudInfoV2 {
 
 	private Map<String, Object> getMap() {
 		if (infoV2Map==null) {
-			String infoV2Json = restTemplate.getForObject(getUrl("/v2/info"), String.class);
+			String infoV2Json = restTemplate.getForObject(getUrl("/v2/info"), String.class); //$NON-NLS-1$
 			infoV2Map = JsonUtil.convertJsonToMap(infoV2Json);
 		}
 		return infoV2Map;
@@ -62,8 +64,8 @@ public class CloudInfoV2 {
 	}
 
 	public SshHost getSshHost() {
-		String fingerPrint = getProp("app_ssh_host_key_fingerprint");
-		String host = getProp("app_ssh_endpoint");
+		String fingerPrint = getProp("app_ssh_host_key_fingerprint"); //$NON-NLS-1$
+		String host = getProp("app_ssh_endpoint"); //$NON-NLS-1$
 		int port = 22; //Default ssh port
 		if (host!=null) {
 			if (host.contains(":")) {

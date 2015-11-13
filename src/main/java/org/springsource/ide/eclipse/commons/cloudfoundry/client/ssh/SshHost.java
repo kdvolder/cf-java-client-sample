@@ -1,5 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2012 Pivotal Software, Inc.
+ * Copied from Spring Tool Suite. Original license:
+ * 
+ * Copyright (c) 2015 Pivotal Software, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,37 +10,46 @@
  * Contributors:
  *     Pivotal Software, Inc. - initial API and implementation
  *******************************************************************************/
-package org.kdvolder.cf.client.sample.ssh;
+package org.springsource.ide.eclipse.commons.cloudfoundry.client.ssh;
 
 /**
- * Info object containing various bits of info about the host to which
- * an ssh client may wish to connect.
+ * Info object containing various bits of info about the host to which an ssh
+ * client may wish to connect.
  * 
  * @author Kris De Volder
  */
 public class SshHost {
 
 	final private String host;
+
 	final private int port;
+
 	final private String fingerPrint;
-	
+
 	public SshHost(String host, int port, String fingerPrint) {
 		super();
 		this.host = host;
 		this.port = port;
 		this.fingerPrint = fingerPrint;
 	}
+
 	public String getFingerPrint() {
 		return fingerPrint;
 	}
+
 	public int getPort() {
 		return port;
 	}
+
 	public String getHost() {
 		return host;
 	}
+
 	@Override
 	public String toString() {
-		return "SshHost [host=" + host + ", port=" + port + ", fingerPrint=" + fingerPrint + "]";
+		return "SshHost [host=" //$NON-NLS-1$
+				+ host + ", port=" //$NON-NLS-1$
+				+ port + ", fingerPrint=" //$NON-NLS-1$
+				+ fingerPrint + "]";//$NON-NLS-1$
 	}
 }

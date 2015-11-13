@@ -1,4 +1,6 @@
 /*
+ * Copied from Spring Tool Suite and cf-java-client. Original license:
+ * 
  * Copyright 2009-2015 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kdvolder.cf.client.sample.ssh;
+package org.springsource.ide.eclipse.commons.cloudfoundry.client.ssh;
 
 import static org.apache.http.conn.ssl.SSLSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER;
 
@@ -96,7 +98,7 @@ public class RestUtils {
 		try {
 			return new SSLContextBuilder().useSSL().loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
 		} catch (GeneralSecurityException gse) {
-			throw new RuntimeException("An error occurred setting up the SSLContext", gse);
+			throw new RuntimeException("An error occurred setting up the SSLContext", gse); //$NON-NLS-1$
 		}
 	}
 

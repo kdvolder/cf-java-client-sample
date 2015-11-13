@@ -1,4 +1,6 @@
 /*******************************************************************************
+ * Copied from Spring Tool Suite. Original license:
+ *
  * Copyright (c) 2015 Pivotal Software, Inc.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,13 +10,13 @@
  * Contributors:
  *     Pivotal Software, Inc. - initial API and implementation
  *******************************************************************************/
-package org.kdvolder.cf.client.sample.ssh;
+package org.springsource.ide.eclipse.commons.cloudfoundry.client.ssh;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
@@ -46,11 +48,11 @@ public class SshClientSupport {
 	public SshClientSupport(AuthorizationHeaderProvider oauth, CloudInfoV2 cloudInfo, boolean trustSelfSigned, HttpProxyConfiguration httpProxyConfiguration) {
 		this.cloudInfo = cloudInfo;
 		this.oauth = oauth;
-		
+
 		this.restTemplate = RestUtils.createRestTemplate(httpProxyConfiguration, trustSelfSigned, true);
 		ClientHttpRequestFactory requestFactory = restTemplate.getRequestFactory();
 		restTemplate.setRequestFactory(authorize(requestFactory));
-		
+
 		this.authorizationUrl = cloudInfo.getAuthorizationUrl();
 		this.sshClientId = cloudInfo.getSshClientId();
 	}
@@ -60,7 +62,7 @@ public class SshClientSupport {
 
 			public ClientHttpRequest createRequest(URI uri, HttpMethod httpMethod) throws IOException {
 				ClientHttpRequest request = delegate.createRequest(uri, httpMethod);
-				request.getHeaders().add("Authorization", oauth.getAuthorizationHeader());
+				request.getHeaders().add("Authorization", oauth.getAuthorizationHeader()); //$NON-NLS-1$
 				return request;
 			}
 		};
@@ -68,32 +70,34 @@ public class SshClientSupport {
 
 	public String getSshCode() {
 		try {
-			URIBuilder builder = new URIBuilder(authorizationUrl + "/oauth/authorize");
-			
-			builder.addParameter("response_type", "code");
-			builder.addParameter("grant_type", "authorization_code");
-			builder.addParameter("client_id", sshClientId);
-			
+			URIBuilder builder = new URIBuilder(authorizationUrl + "/oauth/authorize"); //$NON-NLS-1$
+
+			builder.addParameter("response_type" //$NON-NLS-1$
+					, "code"); //$NON-NLS-1$
+			builder.addParameter("grant_type", //$NON-NLS-1$
+					"authorization_code"); //$NON-NLS-1$
+			builder.addParameter("client_id", sshClientId); //$NON-NLS-1$
+
 			URI url = new URI(builder.toString());
-			
+
 			ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 			HttpStatus statusCode = response.getStatusCode();
 			if (statusCode!=HttpStatus.FOUND) {
 				throw new CloudFoundryException(statusCode);
 			}
-			
-			String loc = response.getHeaders().getFirst("Location");
+
+			String loc = response.getHeaders().getFirst("Location"); //$NON-NLS-1$
 			if (loc==null) {
-				throw new CloudOperationException("No 'Location' header in redirect response");
+				throw new CloudOperationException("No 'Location' header in redirect response"); //$NON-NLS-1$
 			}
-			List<NameValuePair> qparams = URLEncodedUtils.parse(new URI(loc), "utf8");
+			List<NameValuePair> qparams = URLEncodedUtils.parse(new URI(loc), "utf8"); //$NON-NLS-1$
 			for (NameValuePair pair : qparams) {
 				String name = pair.getName();
-				if (name.equals("code")) {
+				if (name.equals("code")) { //$NON-NLS-1$
 					return pair.getValue();
 				}
 			}
-			throw new CloudOperationException("No 'code' param in redirect Location: "+loc);
+			throw new CloudOperationException("No 'code' param in redirect Location: "+loc); //$NON-NLS-1$
 		} catch (URISyntaxException e) {
 			throw new CloudOperationException(e);
 		}
@@ -110,7 +114,7 @@ public class SshClientSupport {
 				return token.getTokenType()+" "+token.getValue();
 			}
 		};
-		
+
 		CloudInfoV2 cloudInfo = new CloudInfoV2(
 				creds,
 				client.getCloudControllerUrl(),
@@ -121,4 +125,11 @@ public class SshClientSupport {
 		return new SshClientSupport(oauth, cloudInfo, selfSigned, proxyConf);
 	}
 
+	/**
+	 * When connecting an ssh client to CF the 'username' is derived from, and identifies a
+	 * specific app instance. This method formats the 'username' from an appGuid and an instance number.
+	 */
+	public String getSshUser(UUID appGuid, int instance) {
+		return "cf:"+appGuid+"/" + instance;
+	}
 }

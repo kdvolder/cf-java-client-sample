@@ -15,32 +15,29 @@ import org.cloudfoundry.client.lib.CloudCredentials;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.CloudFoundryOperations;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
-import org.kdvolder.cf.client.sample.ssh.AuthorizationHeaderProvider;
-import org.kdvolder.cf.client.sample.ssh.CloudInfoV2;
-import org.kdvolder.cf.client.sample.ssh.SshClientSupport;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springsource.ide.eclipse.commons.cloudfoundry.client.ssh.SshClientSupport;
 
 public class MainGetSshCode {
-	
+
 	public static void main(String[] args) throws Exception {
 		CloudCredentials creds = new CloudCredentials(EMAIL, PW);
 		final CloudFoundryOperations client = new CloudFoundryClient(
 				creds,
-				new URL(CC_URL), ORG_NAME, SPACE_NAME, 
+				new URL(CC_URL), ORG_NAME, SPACE_NAME,
 				PROXY_CONF,
 				SELF_SIGNED
 		);
-		
+
 		SshClientSupport ssh = SshClientSupport.create(client, creds, PROXY_CONF, SELF_SIGNED);
-		
+
 
 		//Just to make sure stuff is alright:
 		CloudApplication app = client.getApplication(APP_NAME);
 		System.out.println("App = "+app);
-		
+
 		System.out.println("ssh-host: " +ssh.getSshHost());
 		System.out.println("ssh-code: '"+ssh.getSshCode()+"'");
-		
+
 	}
 
 

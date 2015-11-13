@@ -9,13 +9,13 @@ public class CfClientConstants {
 	public static final String SPACE_NAME = "kdevolder";
 	public static final String EMAIL = "kdevolder@gopivotal.com";
 	public static final String PW = System.getProperty("cf.password");
-	public static final String APP_NAME = "demo2";
-	
+	public static final String APP_NAME = "demo";
+
 	public static final boolean SELF_SIGNED = false;
 	public static final HttpProxyConfiguration PROXY_CONF = null;
 
 
-	
+
 	public static final long RUNNING_TIME = 1000 * 60 * 1; // 1 minutes
 
 
